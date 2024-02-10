@@ -8,6 +8,7 @@ import com.example.testfirebase.data.data
 import com.example.testfirebase.model.User
 import com.example.testfirebase.model.UserModel
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class UserViewModel(private val userRepository: UserModel): ViewModel() {
@@ -31,6 +32,7 @@ class UserViewModel(private val userRepository: UserModel): ViewModel() {
         viewModelScope.launch {
             if (data.userConnectedID.value != null) {
                 Log.d("miUser", data.userConnectedID.value + " " + data.userConnected.value.toString())
+
                 var addUserTask = userRepository.addUser(user.copy(connected = true), data.userConnectedID.value)
                 Log.d("add", addUserTask.toString())
                 data.nombre.value = ""

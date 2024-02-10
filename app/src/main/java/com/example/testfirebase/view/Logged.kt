@@ -15,8 +15,14 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -70,26 +76,14 @@ fun UserListItem(viewModel: UserViewModel, user: User) {
         modifier = Modifier
             .padding(vertical = 4.dp)
             .fillMaxWidth()
-            .clickable(
-                onClick = {
-                // Obtener el id del usuario
-                viewModel.getIdUser(user)
-                data.nombre.value = user.nombre
-                data.edad.value = user.edad.toString()
-                }
-            )
     ) {
         Column(
 
         ) {
             // Texto con el uid del usuario y si está conectado
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-            ){
+            Row {
                 Text(
-                    text = "ID: ${viewModel.getIdUser(user)}",
+                    text = "${user.email}",
                     style = TextStyle(
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
@@ -97,9 +91,11 @@ fun UserListItem(viewModel: UserViewModel, user: User) {
                 )
                 Icon(
                     painter = if (user.connected) painterResource(id = R.drawable.ic_connected) else painterResource(id = R.drawable.ic_disconnected),
-                    contentDescription = if (user.connected) "Usuario conectado" else "Usuario desconectado"
+                    contentDescription = if (user.connected) "Usuario conectado" else "Usuario desconectado",
+                    tint = if (user.connected) Color.Green else Color.Red // Define el color del icono aquí
                 )
             }
+
             Text(
                 text = "Nombre: ${user.nombre}"
             )

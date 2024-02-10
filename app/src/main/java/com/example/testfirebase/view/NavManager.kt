@@ -24,7 +24,7 @@ fun Nav(
             RegisterAuthScreen(navController, viewModel, auth)
         }
         composable("registerUser"){
-            RegisterUserScreen(navController, viewModel)
+            RegisterUserScreen(navController, viewModel, auth)
         }
         composable("logged"){
             LoggedScreen(navController, viewModel)

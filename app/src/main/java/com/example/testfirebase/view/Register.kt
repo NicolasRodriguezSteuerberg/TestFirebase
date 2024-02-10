@@ -88,7 +88,7 @@ fun EmailField() {
 }
 
 @Composable
-fun RegisterUserScreen(navController: NavController, viewModel: UserViewModel) {
+fun RegisterUserScreen(navController: NavController, viewModel: UserViewModel, auth: FirebaseAuth) {
     Column(
         modifier = Modifier
             .fillMaxSize(),
@@ -97,12 +97,12 @@ fun RegisterUserScreen(navController: NavController, viewModel: UserViewModel) {
         Text(text = "Registro de Usuario", style = TextStyle(fontSize = 20.sp))
         Spacer(modifier = Modifier.fillMaxHeight(0.1f))
         OutlinedTexts()
-        AddUser(viewModel, navController)
+        AddUser(viewModel, navController, auth)
     }
 }
 
 @Composable
-fun AddUser(viewModel: UserViewModel, navController: NavController) {
+fun AddUser(viewModel: UserViewModel, navController: NavController, auth: FirebaseAuth) {
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier.padding(vertical = 16.dp)
@@ -110,7 +110,7 @@ fun AddUser(viewModel: UserViewModel, navController: NavController) {
         Button(
             onClick = {
                 viewModel.addUser(
-                    User(data.nombre.value, data.edad.value.toIntOrNull() ?: 0),
+                    User(auth.currentUser?.email.toString(), data.nombre.value, data.edad.value.toIntOrNull() ?: 0),
                     navController
                 )
             }

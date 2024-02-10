@@ -10,12 +10,13 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 
 data class User(
+    val email: String = "",
     val nombre: String = "",
     var edad: Int = 0,
     var connected: Boolean = false
 ){
     // Constructor vacío requerido por Firebase
-    constructor() : this("", 0, false)
+    constructor() : this("", "",0, false)
 }
 
 object UserModel{
@@ -46,23 +47,18 @@ object UserModel{
         return userDocument.set(user)
     }
 
-    suspend fun getIdUser(user:User): String?{
+    fun getIdUser(user:User){
         // Obtenemos el id del usuario que queremos actualizar
-        return try {
-            val querySnapshot = db.collection("table_prueba")
-                .whereEqualTo("nombre", user.nombre)
-                .whereEqualTo("edad", user.edad)
-                .get().await()
-
-            if (!querySnapshot.isEmpty) {
-                val document = querySnapshot.documents[0]
-                document.id
-            } else {
-                null
+        db.collection("table_prueba")
+            .whereEqualTo("nombre", user.nombre)
+            .whereEqualTo("edad", user.edad)
+            .get()
+            .continueWith { task ->
+                if (task.isSuccessful) {
+                    val document = task.result?.documents?.get(0)
+                    data.documentId.value = document?.id.toString()
+                }
             }
-        } catch (e: Exception) {
-            null
-        }
     }
 
     fun updateUser(documentId: String, user: User): Task<Void> {
