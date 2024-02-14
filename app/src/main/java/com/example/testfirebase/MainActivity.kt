@@ -34,7 +34,6 @@ class MainActivity : ComponentActivity() {
         FirebaseApp.initializeApp(this)
         // Inicializa la instancia de autenticación de Firebase
         auth = Firebase.auth
-
         setContent {
             TestFirebaseTheme {
                 // A surface container using the 'background' color from the theme
@@ -48,30 +47,44 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    // onStart()
-    override fun onStart() {
+    override fun onStart(){
         super.onStart()
+        checkAuth()
+    }
+
+    fun checkAuth(){
         // Verifica si el usuario está autenticado
         val currentUser = auth.currentUser
         if (currentUser != null) {
-            // El usuario ya está autenticado, obtenemos el id del usuario
-            data.userConnectedID.value = currentUser.uid
-            // obtenemos el usuario
-            viewModel.getUser(currentUser.uid)
-            // Cambiamos el estado de conexión del usuario
-            if (data.userConnected.value?.connected == false) {
-                viewModel.changeConnection(currentUser.uid,true)
+            if(data.userConnected.value != null){
+                // al ya tener el usuario no necesitamos obtenerlo (cuando se va a segundo plano y vuelves)
+                if (data.userConnected.value?.connected == false) {
+                    viewModel.changeConnection(currentUser.uid,true)
+                }
+            } else {
+                // El usuario ya está autenticado, obtenemos el id del usuario
+                data.userConnectedID.value = currentUser.uid
+                Log.d("startAuth", currentUser.uid)
+                // obtenemos el usuario
+                viewModel.getUser(currentUser.uid)
+                // Cambiamos el estado de conexión del usuario
+                Log.d("startAuth", data.userConnected.value.toString()) // estudiar por que es null
+                if (data.userConnected.value?.connected != false) {
+                    viewModel.changeConnection(currentUser.uid, true)
+                }
             }
         } else {
             // No hay usuario autenticado
         }
     }
 
+
     // onStop()
     override fun onStop() {
         super.onStop()
         // Cambiamos el estado de conexión del usuario si está autenticado
         if (data.userConnected.value != null){
+            data.userConnected.value?.connected = false
             viewModel.changeConnection(data.userConnectedID.value,false)
         }
     }

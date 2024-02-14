@@ -66,7 +66,7 @@ object UserModel{
         return db.collection("table_prueba").document(documentId).set(user, SetOptions.merge())
     }
 
-    fun getUserConnected(id:String){
+    suspend fun getUserConnected(id:String){
         db.collection("table_prueba").document(id).get().addOnSuccessListener { document ->
             if (document != null) {
                 val user = document.toObject(User::class.java)

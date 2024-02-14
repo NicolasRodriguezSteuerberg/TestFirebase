@@ -70,6 +70,7 @@ class UserViewModel(private val userRepository: UserModel): ViewModel() {
     fun getUser(id: String){
         viewModelScope.launch {
             userRepository.getUserConnected(id)
+            Log.d("startAuth", data.userConnected.value.toString())
         }
     }
 

@@ -95,7 +95,6 @@ fun UserListItem(viewModel: UserViewModel, user: User) {
                     tint = if (user.connected) Color.Green else Color.Red // Define el color del icono aquí
                 )
             }
-
             Text(
                 text = "Nombre: ${user.nombre}"
             )
