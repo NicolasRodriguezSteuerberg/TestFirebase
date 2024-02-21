@@ -64,7 +64,9 @@ fun UserList(viewModel: UserViewModel, users: List<User>) {
     ) {
         // Iterar sobre la lista de usuarios
         items(users) { user ->
-            UserListItem(viewModel = viewModel, user = user)
+            if(user.email != data.userConnected.value?.email){
+                UserListItem(viewModel = viewModel, user = user)
+            }
         }
     }
 }

@@ -116,6 +116,7 @@ class UserViewModel(private val userRepository: UserModel): ViewModel() {
                         data.userConnectedID.value = user?.uid.toString()
                         data.email.value = ""
                         data.password.value = ""
+                        getUser(data.userConnectedID.value)
                         changeConnection(data.userConnectedID.value,true)
                         navController.navigate("logged")
                     } else {

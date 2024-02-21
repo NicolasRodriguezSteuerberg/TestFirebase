@@ -82,6 +82,26 @@ object UserModel{
         }
     }
 
+    fun getUser(email: String){
+        db.collection("table_prueba")
+            .whereEqualTo("email", email)
+            .get()
+            .addOnSuccessListener { documents ->
+                if (documents != null) {
+                    val user = documents.documents[0].toObject(User::class.java)
+                    if (user != null) {
+                        data.userConnected.value = user
+                        data.userConnectedID.value = documents.documents[0].id
+                        Log.d("miUser", user.toString())
+                    } else {
+                        data.userConnected.value = null
+                    }
+                } else {
+                    data.userConnected.value = null
+                }
+            }
+    }
+
     fun changeConnection(id: String?, connected: Boolean){
         Log.d("miUser", id.toString() + " " + connected.toString())
         if (id != null) {
