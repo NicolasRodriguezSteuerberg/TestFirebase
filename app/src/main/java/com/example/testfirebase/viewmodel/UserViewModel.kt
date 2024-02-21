@@ -49,24 +49,6 @@ class UserViewModel(private val userRepository: UserModel): ViewModel() {
         }
     }
 
-    fun getIdUser(user: User){
-        viewModelScope.launch {
-            userRepository.getIdUser(user)
-        }
-    }
-
-    // Actualiza un usuario existente
-    fun updateUser(user: User) {
-        viewModelScope.launch {
-            if (!data.documentId.value.isEmpty()) {
-                userRepository.updateUser(data.documentId.value,user)
-                data.nombre.value = ""
-                data.edad.value = ""
-                data.documentId.value = ""
-            }
-        }
-    }
-
     // recupera un usuario
     fun getUser(id: String){
         viewModelScope.launch {
@@ -128,6 +110,19 @@ class UserViewModel(private val userRepository: UserModel): ViewModel() {
                         ).show()
                     }
                 }
+        }
+    }
+
+    fun deleteUser(email: String){
+        viewModelScope.launch {
+            userRepository.deleteUser(email)
+        }
+    }
+
+    fun changeUser(navController: NavController) {
+        viewModelScope.launch {
+            userRepository.updateUser(data.userConnected.value?.email.toString(),data.nombre.value,data.edad.value.toInt())
+            navController.navigate("logged")
         }
     }
 }

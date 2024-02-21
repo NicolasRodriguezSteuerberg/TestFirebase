@@ -29,5 +29,8 @@ fun Nav(
         composable("logged"){
             LoggedScreen(navController, viewModel)
         }
+        composable("changeMyUser"){
+            ChangeUserScreen(navController, viewModel)
+        }
     }
 }

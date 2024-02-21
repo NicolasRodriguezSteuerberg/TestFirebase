@@ -3,6 +3,7 @@ package com.example.testfirebase.model
 import android.util.Log
 import com.example.testfirebase.data.data
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.channels.awaitClose
@@ -47,26 +48,28 @@ object UserModel{
         return userDocument.set(user)
     }
 
-    fun getIdUser(user:User){
-        // Obtenemos el id del usuario que queremos actualizar
+    fun updateUser(email: String, nombre: String, edad: Int) {
+        // actualizar usuario
+        // recoger el documento por el campo email
         db.collection("table_prueba")
-            .whereEqualTo("nombre", user.nombre)
-            .whereEqualTo("edad", user.edad)
+            .whereEqualTo("email", email)
             .get()
-            .continueWith { task ->
-                if (task.isSuccessful) {
-                    val document = task.result?.documents?.get(0)
-                    data.documentId.value = document?.id.toString()
+            .addOnSuccessListener { documents ->
+                if (documents != null) {
+                    val user = documents.documents[0].toObject(User::class.java)
+                    if (user != null) {
+                        val userDocument = db.collection("table_prueba").document(documents.documents[0].id)
+                        val data = hashMapOf(
+                            "nombre" to nombre,
+                            "edad" to edad
+                        )
+                        userDocument.set(data, SetOptions.merge())
+                    }
                 }
             }
     }
 
-    fun updateUser(documentId: String, user: User): Task<Void> {
-        // Actualiza un usuario existente en la colección "usuarios"
-        return db.collection("table_prueba").document(documentId).set(user, SetOptions.merge())
-    }
-
-    suspend fun getUserConnected(id:String){
+     fun getUserConnected(id:String){
         db.collection("table_prueba").document(id).get().addOnSuccessListener { document ->
             if (document != null) {
                 val user = document.toObject(User::class.java)
@@ -82,8 +85,10 @@ object UserModel{
         }
     }
 
+    // por si queremos buscarlo por email
     fun getUser(email: String){
         db.collection("table_prueba")
+            // puedio poner los where que quiera
             .whereEqualTo("email", email)
             .get()
             .addOnSuccessListener { documents ->
@@ -110,4 +115,20 @@ object UserModel{
             Log.d("miUser", data.userConnected.value.toString())
         }
     }
+
+    fun deleteUser(email: String){
+        db.collection("table_prueba")
+            .whereEqualTo("email", email)
+            .get()
+            .addOnSuccessListener { documents ->
+                if (documents != null) {
+                    val user = documents.documents[0].toObject(User::class.java)
+                    if (user != null) {
+                        db.collection("table_prueba").document(documents.documents[0].id).delete()
+                    }
+                }
+            }
+        // borrar usuario de auth (copilot me ha dicho que no puedo hacerlo)
+    }
+
 }

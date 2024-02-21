@@ -2,9 +2,11 @@ package com.example.testfirebase.view
 
 import android.util.Log
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -14,6 +16,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -52,14 +55,59 @@ fun LoggedScreen(navController: NavController, viewModel: UserViewModel) {
             Text("Cerrar sesión")
         }
         UserList(viewModel = viewModel, users = data.users.value)
+        if (data.userConnected.value?.email=="damian@gmail.com"){
+            EliminarUsuario(viewModel = viewModel)
+        }
+        ButtonModificarUsuario(viewModel = viewModel, navController)
     }
 }
+
+@Composable
+fun ButtonModificarUsuario(viewModel: UserViewModel, navController: NavController) {
+    Row(
+        modifier = Modifier.fillMaxWidth(0.75f),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Button(
+            onClick = {
+                navController.navigate("changeMyUser")
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(text = "Modificar usuario")
+        }
+    }
+}
+
+@Composable
+fun EliminarUsuario(viewModel: UserViewModel) {
+    Column (
+        modifier = Modifier.fillMaxWidth(0.75f),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ){
+        TextField(
+            value = data.email.value,
+            onValueChange = { data.email.value = it },
+            placeholder = { Text("Email") }
+        )
+        Button(
+            onClick = {
+                viewModel.deleteUser(data.email.value)
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Eliminar usuario")
+        }
+    }
+}
+
+
 // To see the users
 // Composable que contiene la lista de usuarios
 @Composable
 fun UserList(viewModel: UserViewModel, users: List<User>) {
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
+        modifier = if (data.userConnected.value?.email=="damian@gmail.com") Modifier.fillMaxHeight(0.75f).fillMaxWidth(1f)else Modifier.fillMaxSize(),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
     ) {
         // Iterar sobre la lista de usuarios
