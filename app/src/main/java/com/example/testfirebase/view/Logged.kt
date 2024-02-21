@@ -44,7 +44,7 @@ fun LoggedScreen(navController: NavController, viewModel: UserViewModel) {
     ) {
         Button(
             onClick = {
-                navController.navigate("registerAuth")
+                navController.navigate("login")
                 viewModel.changeConnection(data.userConnectedID.value, false)
                 FirebaseAuth.getInstance().signOut()
             }

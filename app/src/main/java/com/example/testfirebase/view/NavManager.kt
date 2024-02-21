@@ -15,10 +15,10 @@ fun Nav(
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = if(auth.currentUser != null) "logged" else "registerAuth"
+        startDestination = if(auth.currentUser != null) "logged" else "login"
     ){
         composable("login"){
-            LoginScreen(navController, viewModel)
+            LoginScreen(navController, viewModel, auth)
         }
         composable("registerAuth"){
             RegisterAuthScreen(navController, viewModel, auth)

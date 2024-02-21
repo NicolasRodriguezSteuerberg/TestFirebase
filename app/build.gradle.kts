@@ -81,8 +81,6 @@ dependencies {
     // For example, add the dependencies for Firebase Authentication and Cloud Firestore
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
-    // firebase auth
-    implementation("com.google.firebase:firebase-auth-ktx")
 
 
     testImplementation("junit:junit:4.13.2")

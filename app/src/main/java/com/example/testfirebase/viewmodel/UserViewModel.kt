@@ -1,6 +1,7 @@
 package com.example.testfirebase.viewmodel
 
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
@@ -104,4 +105,28 @@ class UserViewModel(private val userRepository: UserModel): ViewModel() {
         }
     }
 
+    // Inicia sesión con correo y contraseña
+    fun login(email: String, password: String, auth: FirebaseAuth, navController: NavController){
+        viewModelScope.launch {
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        // Sign in success, update UI with the signed-in user's information
+                        val user = auth.currentUser
+                        data.userConnectedID.value = user?.uid.toString()
+                        data.email.value = ""
+                        data.password.value = ""
+                        changeConnection(data.userConnectedID.value,true)
+                        navController.navigate("logged")
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Toast.makeText(
+                            navController.context,
+                            "LOGIN INCORRECTO",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+        }
+    }
 }
