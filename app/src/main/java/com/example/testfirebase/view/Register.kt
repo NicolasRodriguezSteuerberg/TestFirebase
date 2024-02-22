@@ -42,7 +42,7 @@ fun RegisterAuthScreen(navController: NavController, viewModel: UserViewModel, a
         Spacer(modifier = Modifier.fillMaxHeight(0.1f))
         EmailField()
         Spacer(modifier = Modifier.fillMaxHeight(0.1f))
-        PasswordField()
+        TextoPassword()
         ButtonRegisterAuth(viewModel, navController, auth)
     }
 }
@@ -57,20 +57,6 @@ fun ButtonRegisterAuth(viewModel: UserViewModel, navController: NavController, a
     ) {
         Text("Registrarse")
     }
-}
-
-@Composable
-fun PasswordField() {
-    TextField(
-        value = data.password.value,
-        modifier = Modifier.fillMaxWidth(0.75f),
-        onValueChange = {
-            data.password.value = it
-        },
-        placeholder = {
-            Text("Password")
-        },
-    )
 }
 
 @Composable

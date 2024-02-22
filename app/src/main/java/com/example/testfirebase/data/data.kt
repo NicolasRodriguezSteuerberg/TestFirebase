@@ -14,4 +14,6 @@ object data {
     val password = mutableStateOf("")
 
     val error = mutableStateOf("")
+
+    val passwordVisible = mutableStateOf(false)
 }
