@@ -5,12 +5,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.testfirebase.data.data
+import com.example.testfirebase.viewmodel.ChatViewModel
 import com.example.testfirebase.viewmodel.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun Nav(
     viewModel: UserViewModel,
+    chatViewModel: ChatViewModel,
     auth: FirebaseAuth
 ){
     val navController = rememberNavController()
@@ -35,6 +37,9 @@ fun Nav(
         }
         composable("changeMyUser"){
             ChangeUserScreen(navController, viewModel)
+        }
+        composable("chat"){
+            ChatScreen(navController, chatViewModel, data.userChatting.value, data.userConnected.value?.email.toString())
         }
     }
 }

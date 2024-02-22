@@ -9,9 +9,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.example.testfirebase.data.data
+import com.example.testfirebase.model.MessageModel
 import com.example.testfirebase.model.UserModel
 import com.example.testfirebase.ui.theme.TestFirebaseTheme
 import com.example.testfirebase.view.Nav
+import com.example.testfirebase.viewmodel.ChatViewModel
 import com.example.testfirebase.viewmodel.UserViewModel
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
@@ -26,10 +28,16 @@ class MainActivity : ComponentActivity() {
     private lateinit var userRepository: UserModel
     private lateinit var viewModel: UserViewModel
 
+    private lateinit var messageModel: MessageModel
+    private lateinit var chatViewModel: ChatViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         userRepository = UserModel
         viewModel = UserViewModel(userRepository)
+
+        messageModel = MessageModel
+        chatViewModel = ChatViewModel(MessageModel)
         // Inicializa Firebase
         FirebaseApp.initializeApp(this)
         // Inicializa la instancia de autenticación de Firebase
@@ -41,7 +49,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Nav(viewModel = viewModel, auth = auth)
+                    Nav(viewModel = viewModel, chatViewModel = chatViewModel, auth = auth)
                 }
             }
         }

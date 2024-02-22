@@ -54,7 +54,7 @@ fun LoggedScreen(navController: NavController, viewModel: UserViewModel) {
         ) {
             Text("Cerrar sesión")
         }
-        UserList(viewModel = viewModel, users = data.users.value)
+        UserList(viewModel = viewModel, users = data.users.value, navController = navController)
         if (data.userConnected.value?.email=="damian@gmail.com"){
             EliminarUsuario(viewModel = viewModel)
         }
@@ -105,7 +105,7 @@ fun EliminarUsuario(viewModel: UserViewModel) {
 // To see the users
 // Composable que contiene la lista de usuarios
 @Composable
-fun UserList(viewModel: UserViewModel, users: List<User>) {
+fun UserList(viewModel: UserViewModel, users: List<User>, navController: NavController) {
     LazyColumn(
         modifier = if (data.userConnected.value?.email=="damian@gmail.com") Modifier.fillMaxHeight(0.75f).fillMaxWidth(1f)else Modifier.fillMaxSize(),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
@@ -113,7 +113,7 @@ fun UserList(viewModel: UserViewModel, users: List<User>) {
         // Iterar sobre la lista de usuarios
         items(users) { user ->
             if(user.email != data.userConnected.value?.email){
-                UserListItem(viewModel = viewModel, user = user)
+                UserListItem(viewModel = viewModel, user = user, navController = navController)
             }
         }
     }
@@ -121,11 +121,15 @@ fun UserList(viewModel: UserViewModel, users: List<User>) {
 
 // Composable que contiene un elemento de la lista de usuarios
 @Composable
-fun UserListItem(viewModel: UserViewModel, user: User) {
+fun UserListItem(viewModel: UserViewModel, user: User, navController: NavController) {
     Card(
         modifier = Modifier
             .padding(vertical = 4.dp)
             .fillMaxWidth()
+            .clickable {
+                data.userChatting.value = user.email
+                navController.navigate("chat")
+            }
     ) {
         Column(
 

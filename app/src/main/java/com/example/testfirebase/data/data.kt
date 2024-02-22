@@ -1,6 +1,7 @@
 package com.example.testfirebase.data
 
 import androidx.compose.runtime.mutableStateOf
+import com.example.testfirebase.model.Mensaje
 import com.example.testfirebase.model.User
 
 object data {
@@ -16,4 +17,7 @@ object data {
     val error = mutableStateOf("")
 
     val passwordVisible = mutableStateOf(false)
+
+    val messagesList  = mutableStateOf<List<Mensaje>>(emptyList())
+    val userChatting = mutableStateOf("")
 }
