@@ -2,37 +2,38 @@ package com.example.testfirebase.view
 
 import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
+import com.example.testfirebase.R
 import com.example.testfirebase.data.data
 import com.example.testfirebase.viewmodel.ChatViewModel
 
@@ -49,7 +50,7 @@ fun ChatScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = "Chat con $emailDestinatario")
+                    Text(text = emailDestinatario)
                 },
                 navigationIcon = {
                     IconButton(
@@ -59,43 +60,40 @@ fun ChatScreen(
                     ) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                     }
-                }
+                },
+                modifier = Modifier.zIndex(1f) // para que la top
             )
         },
-        content = {
-            Box(
+    ){ contentPadding ->
+        Column(
+            modifier = Modifier
+                .padding(contentPadding)
+                .fillMaxWidth()
+                .fillMaxHeight(),
+        ){
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.Top),
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = it.calculateTopPadding()),
+                    .padding(horizontal = 16.dp)
+                    .padding(end = 16.dp)
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .weight(1f)
             ){
-                ChatText(
-                    modifier = Modifier
-                        .fillMaxHeight(0.9f)
-                        .align(Alignment.TopCenter),
-                    emailDestinatario,
-                    emailEmisor
-                )
-                ChatInput(
-                    modifier = Modifier
-                        .fillMaxHeight(0.1f)
-                        .align(Alignment.BottomCenter),
-                    viewModel = viewModel,
-                    emailDestinatario = emailDestinatario,
-                    emailEmisor = emailEmisor
-                )
-
+                items(data.messagesList.value){message ->
+                    Messages(message = message.mensaje, destinatario = message.destinatario)
+                }
             }
-        }
-    )
-}
 
-@Composable
-fun ChatText(modifier: Modifier,emailDestinatario: String, emailEmisor: String) {
-    LazyColumn(
-        modifier = modifier.fillMaxWidth()
-    ){
-        items(data.messagesList.value){message ->
-            Messages(message = message.mensaje, destinatario = message.destinatario)
+            ChatInput(
+                modifier = Modifier
+                    .fillMaxHeight(0.11f)
+                    .align(Alignment.End),
+                viewModel = viewModel,
+                emailDestinatario = emailDestinatario,
+                emailEmisor = emailEmisor
+            )
+
         }
     }
 }
@@ -119,9 +117,9 @@ fun Messages(message: String, destinatario: String) {
             textAlign = if (destinatario == data.userConnected.value?.email.toString()) TextAlign.Start else TextAlign.End,
         )
     }
-    Spacer(modifier = Modifier.padding(top = 8.dp))
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatInput(
     modifier: Modifier,
@@ -130,18 +128,43 @@ fun ChatInput(
     emailEmisor: String
 ) {
     Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.SpaceBetween
+        modifier = Modifier.padding(16.dp),
+        verticalAlignment = Alignment.Bottom
     ) {
-        TextField(
+        OutlinedTextField(
             value = data.messageSend.value,
             onValueChange = { data.messageSend.value = it },
+            placeholder = {
+                Text(stringResource(R.string.message))
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .padding(end = 8.dp)
+                .background(Color(0xFF28447C), RoundedCornerShape(16.dp)),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Color.Transparent,
+                unfocusedBorderColor = Color.Transparent
+            ),
+            maxLines = 6
+
         )
-        Button(onClick = {
-            viewModel.addMessage(emailDestinatario, emailEmisor, data.messageSend.value)
-            data.messageSend.value = ""
-        }) {
-            Text(text = "Enviar")
+        IconButton(
+            onClick = {
+                if(data.messageSend.value!="") {
+                    viewModel.addMessage(emailDestinatario, emailEmisor, data.messageSend.value)
+                    data.messageSend.value = ""
+                }
+            },
+            modifier = Modifier
+                .background(Color(0xFF25D366), RoundedCornerShape(50))
+        ) {
+            Icon(
+                imageVector = Icons.Default.Send,
+                contentDescription = "Send message"
+            )
         }
     }
 }

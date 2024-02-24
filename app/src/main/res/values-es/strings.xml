@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TestFirebase</string>
+    <string name="log_out">Cerrar Sesión</string>
+    <string name="log_in">Iniciar Sesion</string>
+    <string name="sign_up">Registrarse</string>
+    <string name="email">Correo electrónico</string>
+    <string name="password">Contraseña</string>
+    <string name="message">Mensaje</string>
+    <string name="delete">Borrar</string>
+    <string name="name">Nombre</string>
+    <string name="age">Edad</string>
+    <string name="update_user">Modificar usuario</string>
+    <string name="new_name">Nuevo nombre</string>
+    <string name="new_age">Nueva edad</string>
+    <string name="cancel">Cancelar</string>
+    <string name="add_user">Añadir usuario</string>
+    <string name="user_register">Registro de usuario</string>
+</resources>

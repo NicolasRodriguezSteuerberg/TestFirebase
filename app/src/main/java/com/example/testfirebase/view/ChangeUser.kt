@@ -9,7 +9,9 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
+import com.example.testfirebase.R
 import com.example.testfirebase.data.data
 import com.example.testfirebase.viewmodel.UserViewModel
 
@@ -32,7 +34,7 @@ fun ChangeUserScreen(navController: NavController,viewModel: UserViewModel) {
 fun MyEmail() {
     Text(
         modifier = Modifier.fillMaxWidth(0.75f),
-        text = "Mi email: ${data.userConnected.value?.email}",
+        text = "${stringResource(id = R.string.email)}: ${data.userConnected.value?.email}",
     )
 }
 
@@ -41,12 +43,12 @@ fun TextosToChange() {
     TextField(
         value = data.nombre.value,
         onValueChange = { data.nombre.value = it },
-        placeholder = { Text("Nuevo nombre ") }
+        placeholder = { Text(stringResource(id = R.string.new_name)) }
     )
     TextField(
         value = data.edad.value,
         onValueChange = { data.edad.value = it },
-        placeholder = { Text("Nueva edad") }
+        placeholder = { Text(stringResource(id = R.string.new_age)) }
     )
 }
 
@@ -59,7 +61,7 @@ fun ButtonsChange(navController: NavController, viewModel: UserViewModel) {
                 viewModel.changeUser(navController)
             }
         ) {
-            Text(text = "Modificar usuario")
+            Text(text = stringResource(id = R.string.update_user))
         }
 
         // cancelar
@@ -68,7 +70,7 @@ fun ButtonsChange(navController: NavController, viewModel: UserViewModel) {
                 navController.navigate("logged")
             }
         ) {
-            Text(text = "Cancelar")
+            Text(text = stringResource(id = R.string.cancel))
         }
     }
 }

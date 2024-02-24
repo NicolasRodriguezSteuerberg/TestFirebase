@@ -18,15 +18,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -52,18 +48,18 @@ fun LoggedScreen(navController: NavController, viewModel: UserViewModel) {
                 FirebaseAuth.getInstance().signOut()
             }
         ) {
-            Text("Cerrar sesión")
+            Text(stringResource(id = R.string.log_out))
         }
-        UserList(viewModel = viewModel, users = data.users.value, navController = navController)
+        UserList(users = data.users.value, navController = navController)
         if (data.userConnected.value?.email=="damian@gmail.com"){
             EliminarUsuario(viewModel = viewModel)
         }
-        ButtonModificarUsuario(viewModel = viewModel, navController)
+        ButtonModificarUsuario(navController)
     }
 }
 
 @Composable
-fun ButtonModificarUsuario(viewModel: UserViewModel, navController: NavController) {
+fun ButtonModificarUsuario(navController: NavController) {
     Row(
         modifier = Modifier.fillMaxWidth(0.75f),
         horizontalArrangement = Arrangement.Center
@@ -74,7 +70,7 @@ fun ButtonModificarUsuario(viewModel: UserViewModel, navController: NavControlle
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = "Modificar usuario")
+            Text(text = stringResource(id = R.string.update_user))
         }
     }
 }
@@ -88,7 +84,7 @@ fun EliminarUsuario(viewModel: UserViewModel) {
         TextField(
             value = data.email.value,
             onValueChange = { data.email.value = it },
-            placeholder = { Text("Email") }
+            placeholder = { Text(stringResource(id = R.string.email)) }
         )
         Button(
             onClick = {
@@ -96,7 +92,7 @@ fun EliminarUsuario(viewModel: UserViewModel) {
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Eliminar usuario")
+            Text(stringResource(id = R.string.delete))
         }
     }
 }
@@ -105,15 +101,17 @@ fun EliminarUsuario(viewModel: UserViewModel) {
 // To see the users
 // Composable que contiene la lista de usuarios
 @Composable
-fun UserList(viewModel: UserViewModel, users: List<User>, navController: NavController) {
+fun UserList(users: List<User>, navController: NavController) {
     LazyColumn(
-        modifier = if (data.userConnected.value?.email=="damian@gmail.com") Modifier.fillMaxHeight(0.75f).fillMaxWidth(1f)else Modifier.fillMaxSize(),
+        modifier = if (data.userConnected.value?.email=="damian@gmail.com") Modifier
+            .fillMaxHeight(0.75f)
+            .fillMaxWidth(1f)else Modifier.fillMaxSize(),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
     ) {
         // Iterar sobre la lista de usuarios
         items(users) { user ->
             if(user.email != data.userConnected.value?.email){
-                UserListItem(viewModel = viewModel, user = user, navController = navController)
+                UserListItem(user = user, navController = navController)
             }
         }
     }
@@ -121,7 +119,7 @@ fun UserList(viewModel: UserViewModel, users: List<User>, navController: NavCont
 
 // Composable que contiene un elemento de la lista de usuarios
 @Composable
-fun UserListItem(viewModel: UserViewModel, user: User, navController: NavController) {
+fun UserListItem( user: User, navController: NavController) {
     Card(
         modifier = Modifier
             .padding(vertical = 4.dp)
@@ -132,13 +130,11 @@ fun UserListItem(viewModel: UserViewModel, user: User, navController: NavControl
                 navController.navigate("chat")
             }
     ) {
-        Column(
-
-        ) {
+        Column{
             // Texto con el uid del usuario y si está conectado
             Row {
                 Text(
-                    text = "${user.email}",
+                    text = user.email,
                     style = TextStyle(
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
@@ -151,9 +147,9 @@ fun UserListItem(viewModel: UserViewModel, user: User, navController: NavControl
                 )
             }
             Text(
-                text = "Nombre: ${user.nombre}"
+                text = "${stringResource(id = R.string.name)}: ${user.nombre}"
             )
-            Text(text = "Edad: ${user.edad}")
+            Text(text = "${stringResource(id = R.string.age)}: ${user.edad}")
         }
         Log.d("User", user.toString())
     }

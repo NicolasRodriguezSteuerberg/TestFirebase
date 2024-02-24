@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -48,7 +49,7 @@ fun Buttons(navController: NavController, viewModel: UserViewModel, auth: Fireba
                 viewModel.login(data.email.value, data.password.value, auth,navController)
             }
         ) {
-            Text(text = "Login")
+            Text(text = stringResource(id = R.string.log_in))
         }
 
         // boton register
@@ -57,7 +58,7 @@ fun Buttons(navController: NavController, viewModel: UserViewModel, auth: Fireba
                 navController.navigate("registerAuth")
             }
         ) {
-            Text(text = "Register")
+            Text(text = stringResource(id = R.string.sign_up))
         }
     }
 }
@@ -76,7 +77,7 @@ fun TextsLogins() {
                 data.email.value = it
             },
             placeholder = {
-                Text("Email")
+                Text(stringResource(id = R.string.email))
             }
         )
 
@@ -95,7 +96,7 @@ fun TextoPassword() {
             data.password.value = it
         },
         placeholder = {
-            Text("Password")
+            Text(stringResource(id = R.string.password))
         },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         singleLine = true,
