@@ -1,5 +1,6 @@
 package com.example.testfirebase.data
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import com.example.testfirebase.model.Mensaje
 import com.example.testfirebase.model.User
@@ -8,7 +9,6 @@ object data {
     val users  = mutableStateOf<List<User>>(emptyList())
     val nombre = mutableStateOf("")
     val edad = mutableStateOf("")
-    val documentId = mutableStateOf("")
     val userConnected = mutableStateOf<User?>(null)
     val userConnectedID = mutableStateOf("")
     val email = mutableStateOf("")
@@ -20,4 +20,6 @@ object data {
 
     val messagesList  = mutableStateOf<List<Mensaje>>(emptyList())
     val userChatting = mutableStateOf("")
+
+    val messageSend = mutableStateOf("")
 }

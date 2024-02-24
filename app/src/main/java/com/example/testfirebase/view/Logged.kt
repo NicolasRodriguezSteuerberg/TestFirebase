@@ -128,6 +128,7 @@ fun UserListItem(viewModel: UserViewModel, user: User, navController: NavControl
             .fillMaxWidth()
             .clickable {
                 data.userChatting.value = user.email
+                //navController.navigate("chat/${user.email}/${data.userConnected.value?.email}")
                 navController.navigate("chat")
             }
     ) {
