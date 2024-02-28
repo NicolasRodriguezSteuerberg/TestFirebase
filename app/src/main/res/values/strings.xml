@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">TestFirebase</string>
+    <string name="message">Message</string>
+    <string name="log_out">Log out</string>
+    <string name="log_in">Log in</string>
+    <string name="sign_up">Sign up</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="delete">Delete</string>
+    <string name="name">Name</string>
+    <string name="age">Age</string>
+    <string name="update_user">Update user</string>
+    <string name="new_name">New name</string>
+    <string name="new_age">New age</string>
+    <string name="cancel">Cancel</string>
+    <string name="add_user">Add user</string>
+    <string name="user_register">User register</string>
 </resources>

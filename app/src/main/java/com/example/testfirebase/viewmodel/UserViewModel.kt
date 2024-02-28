@@ -30,99 +30,86 @@ class UserViewModel(private val userRepository: UserModel): ViewModel() {
     }
 
     fun addUser(user: User, navController: NavController) {
-        viewModelScope.launch {
-            if (data.userConnectedID.value != null) {
-                Log.d("miUser", data.userConnectedID.value + " " + data.userConnected.value.toString())
+        if (data.userConnectedID.value != null) {
+            Log.d("miUser", data.userConnectedID.value + " " + data.userConnected.value.toString())
 
-                var addUserTask = userRepository.addUser(user.copy(connected = true), data.userConnectedID.value)
-                Log.d("add", addUserTask.toString())
-                data.nombre.value = ""
-                data.edad.value = ""
-                data.userConnected.value = user
-                Log.d("miUser", user.toString())
-                changeConnection(data.userConnectedID.value,true)
-                navController.navigate("logged")
-            } else{
-                data.error.value = "No user connected"
-                navController.navigate("registerAuth")
-            }
+            var addUserTask = userRepository.addUser(user.copy(connected = true), data.userConnectedID.value)
+            Log.d("add", addUserTask.toString())
+            data.nombre.value = ""
+            data.edad.value = ""
+            data.userConnected.value = user
+            Log.d("miUser", user.toString())
+            changeConnection(data.userConnectedID.value,true)
+            navController.navigate("logged")
+        } else{
+            data.error.value = "No user connected"
+            navController.navigate("registerAuth")
         }
     }
 
     // recupera un usuario
     fun getUser(id: String){
-        viewModelScope.launch {
-            userRepository.getUserConnected(id)
-            Log.d("startAuth", data.userConnected.value.toString())
-        }
+        userRepository.getUserConnected(id)
+        Log.d("startAuth", data.userConnected.value.toString())
     }
 
     fun changeConnection(id: String, connected: Boolean){
-        viewModelScope.launch {
-            Log.d("miUser", data.userConnected.value.toString() + " " + data.userConnectedID.value)
-            Log.d("miUser", "cambio a: " + connected)
-            userRepository.changeConnection(id, connected)
-            Log.d("miUser", data.userConnected.value.toString() + " " + data.userConnectedID.value)
-        }
+        Log.d("miUser", data.userConnected.value.toString() + " " + data.userConnectedID.value)
+        Log.d("miUser", "cambio a: " + connected)
+        userRepository.changeConnection(id, connected)
+        Log.d("miUser", data.userConnected.value.toString() + " " + data.userConnectedID.value)
+
     }
 
     fun registerAuthUser(email: String, password: String, auth: FirebaseAuth, navController: NavController){
-        viewModelScope.launch {
-            auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        // Sign in success, update UI with the signed-in user's information
-                        val user = auth.currentUser
-                        data.userConnectedID.value = user?.uid.toString()
-                        data.email.value = ""
-                        data.password.value = ""
-                        navController.navigate("registerUser")
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        data.error.value = "Authentication failed."
-                    }
+        auth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    val user = auth.currentUser
+                    data.userConnectedID.value = user?.uid.toString()
+                    data.email.value = ""
+                    data.password.value = ""
+                    navController.navigate("registerUser")
+                } else {
+                    // If sign in fails, display a message to the user.
+                    data.error.value = "Authentication failed."
                 }
-            Log.d("TAG", "createUserWithEmail:success")
-            Log.d("TAG", data.userConnectedID.value)
-        }
+            }
+        Log.d("TAG", "createUserWithEmail:success")
+        Log.d("TAG", data.userConnectedID.value)
     }
 
     // Inicia sesión con correo y contraseña
     fun login(email: String, password: String, auth: FirebaseAuth, navController: NavController){
-        viewModelScope.launch {
-            auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        // Sign in success, update UI with the signed-in user's information
-                        val user = auth.currentUser
-                        data.userConnectedID.value = user?.uid.toString()
-                        data.email.value = ""
-                        data.password.value = ""
-                        getUser(data.userConnectedID.value)
-                        changeConnection(data.userConnectedID.value,true)
-                        navController.navigate("logged")
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Toast.makeText(
-                            navController.context,
-                            "LOGIN INCORRECTO",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    val user = auth.currentUser
+                    data.userConnectedID.value = user?.uid.toString()
+                    data.email.value = ""
+                    data.password.value = ""
+                    getUser(data.userConnectedID.value)
+                    changeConnection(data.userConnectedID.value,true)
+                    navController.navigate("logged")
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Toast.makeText(
+                        navController.context,
+                        "LOGIN INCORRECTO",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
-        }
+            }
     }
 
     fun deleteUser(email: String){
-        viewModelScope.launch {
-            userRepository.deleteUser(email)
-        }
+        userRepository.deleteUser(email)
     }
 
     fun changeUser(navController: NavController) {
-        viewModelScope.launch {
-            userRepository.updateUser(data.userConnected.value?.email.toString(),data.nombre.value,data.edad.value.toInt())
-            navController.navigate("logged")
-        }
+        userRepository.updateUser(data.userConnected.value?.email.toString(),data.nombre.value,data.edad.value.toInt())
+        navController.navigate("logged")
     }
 }

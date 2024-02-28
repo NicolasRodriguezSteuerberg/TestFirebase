@@ -17,11 +17,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.testfirebase.R
 import com.example.testfirebase.data.data
 import com.example.testfirebase.model.User
 import com.example.testfirebase.viewmodel.UserViewModel
@@ -38,7 +40,7 @@ fun RegisterAuthScreen(navController: NavController, viewModel: UserViewModel, a
             Text(text = data.error.value, color = Color.Red, style = TextStyle(fontSize = 20.sp))
             Spacer(modifier = Modifier.fillMaxHeight(0.1f))
         }
-        Text(text = "Registro de Usuario", style = TextStyle(fontSize = 20.sp))
+        Text(text = stringResource(id = R.string.user_register), style = TextStyle(fontSize = 20.sp))
         Spacer(modifier = Modifier.fillMaxHeight(0.1f))
         EmailField()
         Spacer(modifier = Modifier.fillMaxHeight(0.1f))
@@ -55,7 +57,7 @@ fun ButtonRegisterAuth(viewModel: UserViewModel, navController: NavController, a
             viewModel.registerAuthUser(data.email.value, data.password.value, auth, navController)
         }
     ) {
-        Text("Registrarse")
+        Text(stringResource(id = R.string.sign_up))
     }
 }
 
@@ -68,7 +70,7 @@ fun EmailField() {
             data.email.value = it
         },
         placeholder = {
-            Text("Email")
+            Text(stringResource(id = R.string.email))
         },
     )
 }
@@ -80,7 +82,7 @@ fun RegisterUserScreen(navController: NavController, viewModel: UserViewModel, a
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Registro de Usuario", style = TextStyle(fontSize = 20.sp))
+        Text(text = stringResource(id = R.string.user_register), style = TextStyle(fontSize = 20.sp))
         Spacer(modifier = Modifier.fillMaxHeight(0.1f))
         OutlinedTexts()
         AddUser(viewModel, navController, auth)
@@ -101,7 +103,7 @@ fun AddUser(viewModel: UserViewModel, navController: NavController, auth: Fireba
                 )
             }
         ) {
-            Text("Añadir Usuario")
+            Text(stringResource(id = R.string.add_user))
         }
     }
 }
@@ -115,7 +117,7 @@ fun OutlinedTexts(){
             data.nombre.value = it
         },
         label = {
-            Text("Nombre")
+            Text(stringResource(id = R.string.name))
         },
         modifier = Modifier.padding(16.dp)
     )
@@ -130,7 +132,7 @@ fun OutlinedTexts(){
             } ?: data.edad.value
         },
         label = {
-            Text("Edad")
+            Text(stringResource(id = R.string.age))
         },
         modifier = Modifier.padding(16.dp),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
