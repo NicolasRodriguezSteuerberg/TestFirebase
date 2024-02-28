@@ -31,9 +31,7 @@ class ChatViewModel(private val userRepository: MessageModel): ViewModel() {
     }*/
 
     fun addMessage(destinatario: String, emisor: String, mensaje: String){
-        viewModelScope.launch {
-            userRepository.addMessage(message = Mensaje(destinatario, emisor, mensaje, Date()))
-        }
+        userRepository.addMessage(message = Mensaje(destinatario, emisor, mensaje, Date()))
     }
 
 }
